@@ -1,12 +1,11 @@
 import logging
 from logging.config import fileConfig
+from website import create_app, db  # Import db and the app instance
+from website.models import WeatherData
 
 from flask import current_app
 
 from alembic import context
-
-from website import create_app, db  # Import db and the app instance
-from website.models import User 
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -16,7 +15,6 @@ config = context.config
 # This line sets up loggers basically.
 fileConfig(config.config_file_name)
 logger = logging.getLogger('alembic.env')
-
 target_metadata = db.metadata
 
 

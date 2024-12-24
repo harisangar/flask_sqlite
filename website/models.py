@@ -17,15 +17,43 @@
 #     first_name = db.Column(db.String(150))
 #     notes = db.relationship('Note')
 
-from website import db
-from datetime import datetime
+# from website import db
+# from datetime import datetime
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(128), nullable=False)
-    date_created = db.Column(db.DateTime, default=datetime.utcnow)
+# class User(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     username = db.Column(db.String(80), unique=True, nullable=False)
+#     email = db.Column(db.String(120), unique=True, nullable=False)
+#     password = db.Column(db.String(128), nullable=False)
+#     date_created = db.Column(db.DateTime, default=datetime.utcnow)
+
+#     def __repr__(self):
+#         return f"<User {self.username}>"
+
+
+
+
+from . import db
+
+class WeatherData(db.Model):
+    __tablename__ = 'weather_data'  # Define the table name
+
+    # Define columns
+  
+    name = db.Column(db.String(100), nullable=False)
+    country = db.Column(db.String(100), nullable=False)
+    temp_c = db.Column(db.Float, nullable=False)
+    humidity = db.Column(db.Integer, nullable=False)
+    wind_kph = db.Column(db.Float, nullable=False)
+    condition_text = db.Column(db.String(255), nullable=False)
+    condition_icon = db.Column(db.String(255), nullable=False)
+    condition_code = db.Column(db.Integer, nullable=False)
+    localtime = db.Column(db.String(100), nullable=False)
+
+
+    __table_args__ = (
+        db.PrimaryKeyConstraint('name', 'condition_code'),
+    )
 
     def __repr__(self):
-        return f"<User {self.username}>"
+        return f"<WeatherData {self.name}, {self.country}, {self.temp_c}°C>"
