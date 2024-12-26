@@ -1,6 +1,6 @@
 from flask import Blueprint,render_template,request,flash,jsonify,json
 from flask_login import  login_required,logout_user,current_user
-# from .models import Note
+
 from . import db
 from . import fetch_and_store_weather,fetchcityeather
 views = Blueprint('views',__name__)
