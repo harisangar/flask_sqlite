@@ -1,5 +1,6 @@
 import logging
 from logging.config import fileConfig
+
 from website import create_app, db  # Import db and the app instance
 from website.models import WeatherData
 
@@ -16,7 +17,6 @@ config = context.config
 fileConfig(config.config_file_name)
 logger = logging.getLogger('alembic.env')
 target_metadata = db.metadata
-
 
 def get_engine():
     try:

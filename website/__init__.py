@@ -1,7 +1,7 @@
 from flask import Flask, Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-
+from datetime import datetime
 db = SQLAlchemy()
 migrate = Migrate()
 
@@ -150,3 +150,39 @@ def fetchcityeather(city_name):
 
     else:
         print("Weather data for this country and localtime already exists, skipping insert.")
+
+
+def fetchdashboarddata(city):
+     import json
+     from website.models import WeatherData
+     city_weather = WeatherData.query.filter_by(name=city).first()
+     if city_weather:
+        # Initialize a dictionary to store the weather information
+        weather_info = {}
+
+        # If localtime is a string, convert it to a datetime object
+        localtime = city_weather.localtime
+        if isinstance(localtime, str):
+            localtime = datetime.strptime(localtime, "%Y-%m-%d %H:%M:%S")
+
+        # Extract the day of the week and date
+        day_of_week = localtime.strftime("%A")  # Full day name (e.g., "Saturday")
+        date = localtime.strftime("%Y-%m-%d")  # Date (e.g., "2024-12-26")
+
+        # Store the relevant weather information in the dictionary
+        weather_info = {
+            "day_of_week": day_of_week,
+            "date": date,
+            "city": city_weather.name,
+            "country": city_weather.country,
+            "temperature": f"{city_weather.temp_c}°C",
+            "humidity": f"{city_weather.humidity}%",
+            "wind_speed": f"{city_weather.wind_kph} kph",
+            "condition_text": city_weather.condition_text,
+            "condition_icon": city_weather.condition_icon,
+            "condition_code": city_weather.condition_code,
+            "localtime": city_weather.localtime.strftime("%Y-%m-%d %H:%M:%S")  # Ensure it's formatted properly
+        }
+
+        return weather_info
+    

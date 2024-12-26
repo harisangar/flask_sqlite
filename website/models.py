@@ -34,6 +34,7 @@
 
 
 from . import db
+from datetime import datetime
 
 class WeatherData(db.Model):
     __tablename__ = 'weather_data'  # Define the table name
@@ -48,7 +49,7 @@ class WeatherData(db.Model):
     condition_text = db.Column(db.String(255), nullable=False)
     condition_icon = db.Column(db.String(255), nullable=False)
     condition_code = db.Column(db.Integer, nullable=False)
-    localtime = db.Column(db.String(100), nullable=False)
+    localtime = db.Column(db.DateTime, nullable=False, default=datetime.utcnow) 
 
 
     __table_args__ = (
@@ -56,4 +57,7 @@ class WeatherData(db.Model):
     )
 
     def __repr__(self):
-        return f"<WeatherData {self.name}, {self.country}, {self.temp_c}°C>"
+        return (f"<WeatherData {self.name}, {self.country}, {self.temp_c}°C, "
+                f"Humidity: {self.humidity}%, Wind: {self.wind_kph} kph, "
+                f"Condition: {self.condition_text}, Condition Code: {self.condition_code}, "
+                f"Localtime: {self.localtime.strftime('%Y-%m-%d %H:%M:%S')}>")
