@@ -256,10 +256,10 @@ document.getElementById("addCityButton").addEventListener("click", function () {
     })
       .then((response) => response.json())
       .then((data) => {
+        document.getElementById("cityInput").value = "";
         alert(data.message); // Show the message returned by the server
-        if (data.message === "Weather data inserted successfully!") {
-          document.getElementById("cityInput").value = ""; // Clear the input field after successful insert
-        }
+
+        // Clear the input field after successful insert
       })
       .catch((error) => {
         alert("An error occurred: " + error);
@@ -268,3 +268,78 @@ document.getElementById("addCityButton").addEventListener("click", function () {
     alert("Please enter a city name.");
   }
 });
+
+function getWeather() {
+  // Get the selected city from the dropdown
+  const city = document.getElementById("citySelect").value;
+
+  // Make an API call to the Flask backend with the selected city
+  fetch(`/weather?city=${city}`)
+    .then((response) => response.json())
+    .then((data) => {
+      const forecast = data.forecast.forecastday;
+      const weekData = forecast.map((day) => {
+        // Extract date and icon
+        const date = day.date;
+        const icon = day.day.condition.icon;
+        const temp = day.day.avgtemp_c;
+        // Calculate the ISO week number
+        const dateObj = new Date(date);
+        const weekNumber = getDayOfWeek(dateObj);
+
+        return { date, icon, weekNumber, temp };
+      });
+      const tweek = data.forecast.forecastday[6].date;
+      const tdateObj = new Date(tweek);
+      const week = getDayOfWeek(tdateObj);
+
+      const todaydata = {
+        date: data.forecast.forecastday[6].date,
+        wind: data.forecast.forecastday[6].day.maxwind_kph,
+        humidity: data.forecast.forecastday[6].day.avghumidity,
+        week: week,
+      };
+      document.getElementById("tweek").innerText = todaydata.week;
+      document.getElementById("tdate").innerText = todaydata.date;
+      document.getElementById("tdesc").innerText = `data for ${city}`;
+      document.getElementById("ttime").innerText =
+        new Date().toLocaleTimeString();
+      document.getElementById("twind").innerText = ` ${todaydata.wind} kph`;
+      document.getElementById(
+        "thumidity"
+      ).innerText = ` ${todaydata.humidity} %`;
+      //     const todaydta = document.getElementById("today_data");
+      //     todaydta.innerHTML = `
+      //     <h6 class="block nowday">${todaydata.week}</h6>
+      //     <span class="block nowdate">${todaydata.date}</span>
+      //     <span>Wind Speed: ${todaydata.wind} kph</span><br />
+      //     <span>Humidity: ${todaydata.humidity}%</span><br />
+      //     <span>${new Date().toLocaleTimeString()}</span>
+      // `;
+
+      weekData.forEach((data, index) => {
+        // Get the respective day container, icon, and temperature element
+        const dayContainer = document.getElementById(`day${index + 1}`);
+        const weekdayElement = document.getElementById(`weekday${index + 1}`);
+        const iconElement = document.getElementById(`icon${index + 1}`);
+        const tempElement = document.getElementById(`temp${index + 1}`);
+
+        // Ensure the element exists
+        if (dayContainer && weekdayElement && iconElement && tempElement) {
+          // Update the content
+          weekdayElement.textContent = data.weekNumber; // Day of the week (e.g., 'fri')
+          iconElement.src = data.icon; // Set the icon
+          tempElement.innerHTML = `${data.temp} <sup>°C</sup>`; // Set the temperature
+        }
+      });
+      console.log("today weather", todaydata);
+      console.log("week data ", weekData);
+      console.log(data);
+    })
+    .catch((error) => console.error("Error:", error));
+}
+
+function getDayOfWeek(date) {
+  const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  return daysOfWeek[date.getDay()]; // date.getDay() returns a number between 0 (Sunday) and 6 (Saturday)
+}

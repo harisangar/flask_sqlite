@@ -40,7 +40,7 @@ class WeatherData(db.Model):
     __tablename__ = 'weather_data'  # Define the table name
 
     # Define columns
-  
+   
     name = db.Column(db.String(100), nullable=False)
     country = db.Column(db.String(100), nullable=False)
     temp_c = db.Column(db.Float, nullable=False)

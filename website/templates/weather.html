@@ -167,6 +167,7 @@
                   >
                     <!-- Dropdown for Selecting City -->
                     <select
+                      id="citySelect"
                       style="width: 200px; padding: 10px; margin-right: 10px"
                     >
                       {% for city in city_names %}
@@ -175,19 +176,25 @@
                     </select>
 
                     <!-- Button for Get Weather -->
-                    <button class="btn btn-success" style="padding: 10px 20px">
+                    <button
+                      class="btn btn-success"
+                      style="padding: 10px 20px"
+                      onclick="getWeather()"
+                    >
                       Get Weather
                     </button>
                   </div>
                   <div class="clearfix"></div>
                 </div>
                 <div class="panel-wrapper collapse in">
-                  <div class="panel-body">
-                    <h6 class="block nowday">Saturday</h6>
-                    <span class="block nowdate">12/21/2024</span>
-                    <span>No Weather data available for the selected city</span>
+                  <div class="panel-body" id="today_data">
+                    <h6 class="block nowday" id="tweek">Saturday</h6>
+                    <span class="block nowdate" id="tdate">12/21/2024</span>
+                    <span id="tdesc"
+                      >No Weather data available for the selected city</span
+                    >
                     <br />
-                    <span>12.18 p.m</span>
+                    <span id="ttime">12.18 p.m</span>
                     <!-- <button class="btn btn-warning btn-anim">
                       <i class="fa fa-pencil">hi</i
                       ><span class="btn-text">compose</span>
@@ -203,12 +210,12 @@
                   "
                 >
                   <span>Wind</span>
-                  <h6>8.91 m/s</h6>
+                  <h6 id="twind">8.91 m/s</h6>
                   <span>Humidity</span>
-                  <h6>77%</h6>
+                  <h6 id="thumidity">77%</h6>
                 </div>
                 <hr style="border: 0; border-bottom: 2px solid green" />
-                <div
+                <!-- <div
                   class="panel-body"
                   style="
                     display: flex;
@@ -352,6 +359,140 @@
                     />
                     <h6
                       style="margin-top: 15px; font-size: x-small; color: red"
+                    >
+                      27.95 <sup>°C</sup>
+                    </h6>
+                  </div>
+                </div> -->
+                <div
+                  class="panel-body"
+                  style="
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-around;
+                  "
+                >
+                  <!-- Day 1 -->
+                  <div class="weather-day" id="day1">
+                    <h6 style="color: gray" id="weekday1">fri</h6>
+                    <img
+                      class="brand-img"
+                      id="icon1"
+                      src="{{ url_for('static', filename='img/weather.png') }}"
+                      alt="weather"
+                      style="width: 20px; height: 20px"
+                    />
+                    <h6
+                      style="margin-top: 15px; font-size: x-small; color: red"
+                      id="temp1"
+                    >
+                      27.95 <sup>°C</sup>
+                    </h6>
+                  </div>
+
+                  <!-- Day 2 -->
+                  <div class="weather-day" id="day2">
+                    <h6 style="color: gray" id="weekday2">sat</h6>
+                    <img
+                      class="brand-img"
+                      id="icon2"
+                      src="{{ url_for('static', filename='img/weather.png') }}"
+                      alt="weather"
+                      style="width: 20px; height: 20px"
+                    />
+                    <h6
+                      style="margin-top: 15px; font-size: x-small; color: red"
+                      id="temp2"
+                    >
+                      27.95 <sup>°C</sup>
+                    </h6>
+                  </div>
+
+                  <!-- Day 3 -->
+                  <div class="weather-day" id="day3">
+                    <h6 style="color: gray" id="weekday3">sun</h6>
+                    <img
+                      class="brand-img"
+                      id="icon3"
+                      src="{{ url_for('static', filename='img/weather.png') }}"
+                      alt="weather"
+                      style="width: 20px; height: 20px"
+                    />
+                    <h6
+                      style="margin-top: 15px; font-size: x-small; color: red"
+                      id="temp3"
+                    >
+                      27.95 <sup>°C</sup>
+                    </h6>
+                  </div>
+
+                  <!-- Day 4 -->
+                  <div class="weather-day" id="day4">
+                    <h6 style="color: gray" id="weekday4">mon</h6>
+                    <img
+                      class="brand-img"
+                      id="icon4"
+                      src="{{ url_for('static', filename='img/weather.png') }}"
+                      alt="weather"
+                      style="width: 20px; height: 20px"
+                    />
+                    <h6
+                      style="margin-top: 15px; font-size: x-small; color: red"
+                      id="temp4"
+                    >
+                      27.95 <sup>°C</sup>
+                    </h6>
+                  </div>
+
+                  <!-- Day 5 -->
+                  <div class="weather-day" id="day5">
+                    <h6 style="color: gray" id="weekday5">tue</h6>
+                    <img
+                      class="brand-img"
+                      id="icon5"
+                      src="{{ url_for('static', filename='img/weather.png') }}"
+                      alt="weather"
+                      style="width: 20px; height: 20px"
+                    />
+                    <h6
+                      style="margin-top: 15px; font-size: x-small; color: red"
+                      id="temp5"
+                    >
+                      27.95 <sup>°C</sup>
+                    </h6>
+                  </div>
+
+                  <!-- Day 6 -->
+                  <div class="weather-day" id="day6">
+                    <h6 style="color: gray" id="weekday6">wed</h6>
+                    <img
+                      class="brand-img"
+                      id="icon6"
+                      src="{{ url_for('static', filename='img/weather.png') }}"
+                      alt="weather"
+                      style="width: 20px; height: 20px"
+                    />
+                    <h6
+                      style="margin-top: 15px; font-size: x-small; color: red"
+                      id="temp6"
+                    >
+                      27.95 <sup>°C</sup>
+                    </h6>
+                  </div>
+
+                  <!-- Day 7 -->
+                  <div class="weather-day" id="day7">
+                    <h6 style="color: gray" id="weekday7">thu</h6>
+                    <img
+                      class="brand-img"
+                      id="icon7"
+                      src="{{ url_for('static', filename='img/weather.png') }}"
+                      alt="weather"
+                      style="width: 20px; height: 20px"
+                    />
+                    <h6
+                      style="margin-top: 15px; font-size: x-small; color: red"
+                      id="temp7"
                     >
                       27.95 <sup>°C</sup>
                     </h6>

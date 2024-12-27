@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from flask import Blueprint,render_template,request,flash,jsonify,json
 from flask_login import  login_required,logout_user,current_user
 from website.models import WeatherData
@@ -118,4 +119,39 @@ def fetch_city_weather():
         else:
             return jsonify({"message": "Weather data already inserted!"})
         
-        
+@views.route('/weather', methods=['POST','GET'])
+def get_weather():
+    import http.client
+    from urllib.parse import urlencode
+    today = datetime.today()
+    seven_days_ago = today - timedelta(days=6)
+
+    # Format the dates
+    today_str = today.strftime('%Y-%m-%d')
+    seven_days_ago_str = seven_days_ago.strftime('%Y-%m-%d')
+
+    # Get the city from the query string
+    city = request.args.get('city')
+
+    # API Connection
+    conn = http.client.HTTPSConnection("weatherapi-com.p.rapidapi.com")
+
+    headers = {
+        'x-rapidapi-key': "4765efd0e4msh0e6f4310f441125p115acdjsnc5b407e62f78",
+        'x-rapidapi-host': "weatherapi-com.p.rapidapi.com"
+    }
+
+    # Modify the API URL to use dynamic dates and the selected city
+    url = f"/history.json?q={city}&lang=en&dt={seven_days_ago_str}&end_dt={today_str}"
+
+    # Make the request
+    conn.request("GET", url, headers=headers)
+
+    # Get the response
+    res = conn.getresponse()
+    data = res.read()
+
+    # Parse the response JSON
+    weather_data = json.loads(data.decode("utf-8"))
+    print('weather data for 7 days is',weather_data)
+    return weather_data
